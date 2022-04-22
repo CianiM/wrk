@@ -41,8 +41,7 @@ coefficients = {'ReI'        : 1,
 varname      = {'rho' : 1,
                   'u' : 2,  
                   'v' : 3, 
-                  'et': 4,
-                  'nut': 5}
+                  'et': 4}
                   
 varsolved = ['rho','u','v','et']
 
@@ -74,7 +73,7 @@ varloc       = {'p': ' (gamma_m1)*rho*(e) ',
                 'visc_t' : '  ( visc )*ReI ',                    #Sum of adim dynamic viscosity and turbulent viscosity
                # 'fv2': ' ( 1-chi/( 1 + chi*fv1) ) ',
                # 'ft2': ' ( Ct3*exp(-Ct4*chi**2) ) ',
-               #'fw' : ' ( gg*( 1+Cw3**6 )/( gg**6+Cw3**6) ) ',
+               # 'fw' : ' ( gg*( 1+Cw3**6 )/( gg**6+Cw3**6) ) ',
                # 'gg' : ' ( rr + Cw2*( rr**6-rr ) ) ',
                # 'rr' : ' ( nut/(SS*k**2*eta**2) ) ' ,
                # 'SS' : ' ( stemp+ReI*nut/(k**2*eta**2) ) ',
