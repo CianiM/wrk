@@ -311,6 +311,8 @@ der2Dic[3] = {2:fdd3o2}
 
 fltDic[13] = {8 :flt13o8}
 fltDic[11] = {10:flt11o10,2 :flt11o2}
+fltDic[10] = {4:flt_10_4,2 :flt_10_2}
+fltDic[7]  = {1 :flt_7_1}
 fltDic[5]  = {4 :flt5o4}
 fltDic[3]  = {2 :flt3o2}
 
@@ -319,7 +321,9 @@ derDicBc = {};der2DicBc = {}; fltDicBc = {}
 der2DicBc[4] = {2: fddrs4o2}
 derDicBc[3]  = {2: fdrs3o2 }
 # ['layer'] 
-#fltDicBc[4] = flt_10_4
+fltDicBc[7] = flt_10_4
+fltDicBc[6] = flt_10_4
+fltDicBc[5] = flt_10_4
 fltDicBc[4] = flt_10_4 
 fltDicBc[3] = flt_10_3
 fltDicBc[2] = flt_10_2
@@ -1240,7 +1244,7 @@ def append_Rhs(Flux,Stencil,Order,rhsname,vname,update=False,rhs=None,stored=Fal
 					for s in history[v]['symb']:	
 						if(re.findall('_d'+v+'d'+v+'_',s) != []):
 							hlo_rhs = max(hlo_rhs, 2*int((Stencil-1)/2))
-
+			
 			if(history2 != {'x':[[],[]],'y':[[],[]],'z':[[],[]]} ): hlo_rhs = max(hlo_rhs, int((Stencil-1)/2))
 
 			output.write(comment('Update RHS terms for '+rhsname[rhsvar]))
@@ -1250,6 +1254,10 @@ def append_Rhs(Flux,Stencil,Order,rhsname,vname,update=False,rhs=None,stored=Fal
 		
 			output.write(updateRHS(rhsvar,exp_rhs,update=update,rhs=rhs)+'\n\n')
 		
+		
+		if (hlo_rhs > rhs.hlo_glob):
+			exception('hlo_glob is not correct (equations requires at least hlo_glob >= '+str(hlo_rhs),message='error')			
+			
 		tmpvar = ''
 		for var1 in locvar: 
 			for var2 in var1:
@@ -2446,7 +2454,9 @@ def genBC(Equations,Stencil,Order,rhsname,vname,setbc=[False,{'bcname':{'i1':['r
 										'include_edges_PhyBC_'+bcname+'_'+bctype+'_'+dir1+'_0_0'+'_BClocVar.f90',
 										'include_edges_PhyBC_'+bcname+'_'+bctype+'_'+dir1+'_0_0'+'_BCLoops.f90',indrange,rhs=rhs)
 					bcedges.close()				
-
+		#Synchro	
+		for p in procPipe:
+			p.join()
 
 
 def genBC_calls(rhs):
@@ -4000,6 +4010,7 @@ def genFilter(stencil,order,nvar,dirBC='',indbc='',fltbeg=2,rhs=None):
 	
 		hlo = int((stencil-1)/2)
 		
+
 		for dir in ['x','y','z']:
 			open(incPATH+'updateFilter_'+dir,'w') # set to empty
 			open(incPATH+'Filter_'+dir,'w')       # set to empty
